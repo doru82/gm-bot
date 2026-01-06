@@ -113,21 +113,28 @@ def generate_gm_post():
     news = get_crypto_news()
     news_summary = "\n".join(news[:3]) if news else "No major news today"
     
-    prompt = f"""You are writing a GM (good morning) tweet for a crypto Twitter account. 
+   prompt = f"""You are writing a GM (good morning) tweet for a crypto Twitter account. 
 The account owner is "doru" - a chill, funny crypto enthusiast who loves AVAX and uses sarcastic humor.
 
 STYLE RULES (VERY IMPORTANT):
-- Start with "GM" or "happy {day_name}!" or similar casual greeting
-- Keep it SHORT: 2-4 sentences max
+- ALWAYS start with "GM" or "happy {day_name}!" (day name MUST be capitalized: Monday, Tuesday, etc.)
+- FORMAT: Write on 3-4 separate lines (use line breaks)
+- Keep it SHORT: 3-4 lines, each line 1 sentence max
 - Casual, friendly tone - like talking to friends
-- Sometimes reference the day (Monday vibes, Friday energy, etc.)
 - Light sarcastic humor is good (like comparing crypto to random world events)
 - Can mention market briefly but don't be too serious about it
 - Sometimes ask simple questions for engagement ("yey or ney?", "who's ready?")
 - NO hashtags
 - NO emojis (or max 1-2 if really fits)
-- Write in lowercase mostly (casual vibe)
+- Write in lowercase mostly EXCEPT day names (Monday, Tuesday, etc.)
 - End with something relatable or funny
+
+FORMAT EXAMPLE:
+GM
+
+line about market or vibes
+
+question or funny comment
 
 EXAMPLES OF THE STYLE:
 {STYLE_EXAMPLES}
