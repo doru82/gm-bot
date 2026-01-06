@@ -180,6 +180,9 @@ IMPORTANT: Output ONLY the tweet text, nothing else. No quotes, no explanation."
             tweet = data["choices"][0]["message"]["content"].strip()
             # Clean up any quotes if AI added them
             tweet = tweet.strip('"').strip("'")
+            # Ensure blank lines between sentences
+            lines = [line.strip() for line in tweet.split('\n') if line.strip()]
+            tweet = '\n\n'.join(lines)
             print(f"✅ Generated GM: {tweet}")
             return tweet
         else:
@@ -326,7 +329,7 @@ def post_to_typefully(social_set_id: str, tweet_text: str, media_id: str = None)
                 "posts": [post_content]
             }
         },
-       "publish_at": "now"
+       #"publish_at": "now"
     }
     
     url = f"https://api.typefully.com/v2/social-sets/{social_set_id}/drafts"
