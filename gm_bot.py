@@ -136,6 +136,10 @@ line about market or vibes
 
 question or funny comment
 
+final line
+
+IMPORTANT: Add a blank line between EACH line of the tweet. Every sentence should be separated by an empty line.
+
 EXAMPLES OF THE STYLE:
 {STYLE_EXAMPLES}
 
