@@ -241,12 +241,11 @@ def upload_image_to_typefully(social_set_id: str, image_path: str) -> str:
         else:
             content_type = 'image/jpeg'
         
-        upload_response = requests.put(
+       upload_response = requests.put(
             upload_url,
-            data=f,
-            headers={"Content-Type": content_type},
+            data=f.read(),
             timeout=30
-        )
+        ) 
         
         if upload_response.status_code not in [200, 201]:
             print(f"❌ Failed to upload image: {upload_response.status_code}")
