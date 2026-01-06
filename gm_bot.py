@@ -126,7 +126,7 @@ STYLE RULES (VERY IMPORTANT):
 - Sometimes ask simple questions for engagement ("yey or ney?", "who's ready?")
 - NO hashtags
 - NO emojis (or max 1-2 if really fits)
-- Write in lowercase mostly EXCEPT day names (Monday, Tuesday, etc.)
+- Write in lowercase mostly EXCEPT day names and AVAX name (Monday, Tuesday, etc.)
 - End with something relatable or funny
 
 FORMAT EXAMPLE:
@@ -329,7 +329,7 @@ def post_to_typefully(social_set_id: str, tweet_text: str, media_id: str = None)
                 "posts": [post_content]
             }
         },
-       #"publish_at": "now"
+       "publish_at": "now"
     }
     
     url = f"https://api.typefully.com/v2/social-sets/{social_set_id}/drafts"
