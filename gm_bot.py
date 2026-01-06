@@ -3,7 +3,6 @@ import random
 import requests
 from datetime import datetime
 from dotenv import load_dotenv
-import base64
 
 load_dotenv()
 
@@ -233,19 +232,13 @@ def upload_image_to_typefully(social_set_id: str, image_path: str) -> str:
     
     # Step 2: Upload the file
     with open(image_path, "rb") as f:
-        # Determine content type
-        if image_path.lower().endswith('.png'):
-            content_type = 'image/png'
-        elif image_path.lower().endswith('.gif'):
-            content_type = 'image/gif'
-        else:
-            content_type = 'image/jpeg'
+        file_data = f.read()
         
-       upload_response = requests.put(
+        upload_response = requests.put(
             upload_url,
-            data=f.read(),
+            data=file_data,
             timeout=30
-        ) 
+        )
         
         if upload_response.status_code not in [200, 201]:
             print(f"❌ Failed to upload image: {upload_response.status_code}")
@@ -322,7 +315,7 @@ def post_to_typefully(social_set_id: str, tweet_text: str, media_id: str = None)
                 "posts": [post_content]
             }
         },
-      #  "publish_at": "now"
+        "publish_at": "now"
     }
     
     url = f"https://api.typefully.com/v2/social-sets/{social_set_id}/drafts"
