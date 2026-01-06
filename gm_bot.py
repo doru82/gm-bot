@@ -113,7 +113,7 @@ def generate_gm_post():
     news = get_crypto_news()
     news_summary = "\n".join(news[:3]) if news else "No major news today"
     
-   prompt = f"""You are writing a GM (good morning) tweet for a crypto Twitter account. 
+    prompt = f"""You are writing a GM (good morning) tweet for a crypto Twitter account. 
 The account owner is "doru" - a chill, funny crypto enthusiast who loves AVAX and uses sarcastic humor.
 
 STYLE RULES (VERY IMPORTANT):
