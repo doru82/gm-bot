@@ -2,7 +2,7 @@ name: Daily GM Post
 
 on:
   schedule:
-    # Rulează zilnic la 5:00 UTC (8:05 ora României)
+    # Rulează zilnic la 5:00 UTC (7:05 ora României)
     - cron: '5 5 * * *'
   workflow_dispatch:  # Permite rulare manuală
 
