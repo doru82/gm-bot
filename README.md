@@ -18,7 +18,7 @@ Automated daily GM (Good Morning) posts for X/Twitter using AI.
 
 2. Add images to `images/gm/` folder (PNG, JPG, GIF)
 
-3. Bot runs automatically at 8:00 AM (Romania time)
+3. Bot runs automatically at 7:05 AM (Romania time)
 
 ## Manual Run
 
