@@ -128,6 +128,7 @@ STYLE RULES (VERY IMPORTANT):
 - NO emojis (or max 1-2 if really fits)
 - Write in lowercase mostly EXCEPT day names and AVAX name (Monday, Tuesday, etc.)
 - End with something relatable or funny
+- ALWAYS mention @useTria naturally somewhere in the post (it's a crypto neobank with Visa card, self-custodial, works in 150+ countries, up to 6% cashback). Be casual about it, like recommending it to a friend. Examples: "paying for coffee with @useTria hits different", "still waiting for my @useTria cashback to make me rich", "at least @useTria card works everywhere unlike my bank"
 
 FORMAT EXAMPLE:
 GM
@@ -135,6 +136,8 @@ GM
 line about market or vibes
 
 question or funny comment
+
+casual @useTria mention
 
 final line
 
