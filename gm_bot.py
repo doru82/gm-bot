@@ -10,43 +10,27 @@ load_dotenv()
 # CONFIGURATION
 # ========================================
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 TYPEFULLY_API_KEY = os.getenv("TYPEFULLY_API_KEY", "")
 
 # ========================================
-# STYLE EXAMPLES (your actual posts)
+# LOAD MY POSTS (for style reference)
 # ========================================
 
-STYLE_EXAMPLES = """
-Example 1:
-"GM
-we are here atm, that means we can happily touch grass today
-I'll try to do that as well, but before that, I want to remind you about a great project coming soon on Avax"
-
-Example 2:
-"happy Monday!
-let's spread some good vibes like usa spreading democracy
-market looks ok ish, hope this trend will last more than Madurro"
-
-Example 3:
-"2026 started yesterday, and Friday already!
-Happy Friday!!!"
-
-Example 4:
-"last day of the year!!!
-was a hell of a ride, but grateful to be here
-grateful for everything, good, bad, friends that stayed and friend who left
-happy new year, bros and sis!"
-
-Example 5:
-"GM
-rest day today?
-yey or ney?"
-
-Example 6:
-"GM X
-have a great Saturday!"
-"""
+def load_my_posts():
+    """Load posts from my_posts.txt for style reference."""
+    posts_file = os.path.join(os.path.dirname(__file__), "my_posts.txt")
+    
+    if os.path.exists(posts_file):
+        with open(posts_file, "r", encoding="utf-8") as f:
+            content = f.read()
+            posts = content.split("---")
+            posts = [p.strip() for p in posts if p.strip()]
+            print(f"📝 Loaded {len(posts)} example posts from my_posts.txt")
+            return posts
+    else:
+        print("⚠️ my_posts.txt not found, using default examples")
+        return []
 
 # ========================================
 # FETCH CRYPTO NEWS
@@ -95,14 +79,14 @@ def get_market_sentiment():
 
 
 # ========================================
-# GENERATE GM WITH GROQ
+# GENERATE GM WITH CLAUDE
 # ========================================
 
 def generate_gm_post():
-    """Generate GM post using Groq AI."""
+    """Generate GM post using Claude API."""
     
-    if not GROQ_API_KEY:
-        raise ValueError("GROQ_API_KEY not found!")
+    if not ANTHROPIC_API_KEY:
+        raise ValueError("ANTHROPIC_API_KEY not found!")
     
     # Get current context
     now = datetime.now()
@@ -113,6 +97,35 @@ def generate_gm_post():
     news = get_crypto_news()
     news_summary = "\n".join(news[:3]) if news else "No major news today"
     
+    # Load my posts for style reference
+    my_posts = load_my_posts()
+    if my_posts:
+        # Pick random 5-7 posts as examples
+        sample_posts = random.sample(my_posts, min(7, len(my_posts)))
+        style_examples = "\n\n---\n\n".join(sample_posts)
+    else:
+        style_examples = """GM
+
+we are here atm, that means we can happily touch grass today
+
+I'll try to do that as well
+
+---
+
+happy Monday!
+
+let's spread some good vibes like usa spreading democracy
+
+market looks ok ish, hope this trend will last more than Madurro
+
+---
+
+GM
+
+rest day today?
+
+yey or ney?"""
+
     prompt = f"""You are writing a GM (good morning) tweet for a crypto Twitter account. 
 The account owner is "doru" - a chill, funny crypto enthusiast who loves AVAX and uses sarcastic humor.
 
@@ -126,25 +139,14 @@ STYLE RULES (VERY IMPORTANT):
 - Sometimes ask simple questions for engagement ("yey or ney?", "who's ready?")
 - NO hashtags
 - NO emojis (or max 1-2 if really fits)
-- Write in lowercase mostly EXCEPT day names and AVAX name (Monday, Tuesday, etc.)
+- Write in lowercase mostly EXCEPT day names (Monday, Tuesday, etc.)
 - End with something relatable or funny
 - ALWAYS mention @useTria naturally somewhere in the post (it's a crypto neobank with Visa card, self-custodial, works in 150+ countries, up to 6% cashback). Be casual about it, like recommending it to a friend. Examples: "paying for coffee with @useTria hits different", "still waiting for my @useTria cashback to make me rich", "at least @useTria card works everywhere unlike my bank"
+- Add a BLANK LINE between each sentence (double line break)
 
-FORMAT EXAMPLE:
-GM
+HERE ARE EXAMPLES OF MY ACTUAL POSTS - MATCH THIS STYLE EXACTLY:
 
-line about market or vibes
-
-question or funny comment
-
-casual @useTria mention
-
-final line
-
-IMPORTANT: Add a blank line between EACH line of the tweet. Every sentence should be separated by an empty line.
-
-EXAMPLES OF THE STYLE:
-{STYLE_EXAMPLES}
+{style_examples}
 
 CURRENT CONTEXT:
 - Today is: {day_name}
@@ -154,25 +156,25 @@ CURRENT CONTEXT:
 
 Now write ONE GM tweet in this exact style. Be creative, maybe reference something current happening in the world (politics, sports, memes) in a funny way. Keep it authentic and casual.
 
-IMPORTANT: Output ONLY the tweet text, nothing else. No quotes, no explanation."""
+IMPORTANT: Output ONLY the tweet text, nothing else. No quotes, no explanation. Each line separated by blank lines."""
 
     headers = {
-        "Authorization": f"Bearer {GROQ_API_KEY}",
-        "Content-Type": "application/json"
+        "x-api-key": ANTHROPIC_API_KEY,
+        "Content-Type": "application/json",
+        "anthropic-version": "2023-06-01"
     }
     
     payload = {
-        "model": "llama-3.3-70b-versatile",
+        "model": "claude-sonnet-4-20250514",
+        "max_tokens": 300,
         "messages": [
             {"role": "user", "content": prompt}
-        ],
-        "max_tokens": 200,
-        "temperature": 0.9
+        ]
     }
     
     try:
         response = requests.post(
-            "https://api.groq.com/openai/v1/chat/completions",
+            "https://api.anthropic.com/v1/messages",
             headers=headers,
             json=payload,
             timeout=30
@@ -180,7 +182,7 @@ IMPORTANT: Output ONLY the tweet text, nothing else. No quotes, no explanation."
         
         if response.status_code == 200:
             data = response.json()
-            tweet = data["choices"][0]["message"]["content"].strip()
+            tweet = data["content"][0]["text"].strip()
             # Clean up any quotes if AI added them
             tweet = tweet.strip('"').strip("'")
             # Ensure blank lines between sentences
@@ -189,7 +191,7 @@ IMPORTANT: Output ONLY the tweet text, nothing else. No quotes, no explanation."
             print(f"✅ Generated GM: {tweet}")
             return tweet
         else:
-            print(f"❌ Groq error: {response.status_code} - {response.text}")
+            print(f"❌ Claude error: {response.status_code} - {response.text}")
             return None
             
     except Exception as e:
@@ -332,7 +334,7 @@ def post_to_typefully(social_set_id: str, tweet_text: str, media_id: str = None)
                 "posts": [post_content]
             }
         },
-       "publish_at": "now"
+        "publish_at": "now"
     }
     
     url = f"https://api.typefully.com/v2/social-sets/{social_set_id}/drafts"
@@ -369,7 +371,7 @@ def run_gm_bot():
         return
     
     # 2. Generate GM post
-    print("\n📝 Generating GM post...")
+    print("\n📝 Generating GM post with Claude...")
     tweet = generate_gm_post()
     
     if not tweet:
@@ -398,8 +400,8 @@ def run_gm_bot():
 
 
 if __name__ == "__main__":
-    if not GROQ_API_KEY:
-        print("❌ GROQ_API_KEY not found!")
+    if not ANTHROPIC_API_KEY:
+        print("❌ ANTHROPIC_API_KEY not found!")
         exit(1)
     if not TYPEFULLY_API_KEY:
         print("❌ TYPEFULLY_API_KEY not found!")
