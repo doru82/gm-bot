@@ -6,7 +6,7 @@ Automated daily GM (Good Morning) posts for X/Twitter using AI.
 
 - 🤖 AI-generated GM posts using Groq (Llama 3.3)
 - 📰 Incorporates current crypto news & market sentiment
-- 🖼️ Random Cozy Penguin images
+- 🖼️ Random Cozy Wassie images
 - 📅 Day-aware (Monday vibes, Friday energy, etc.)
 - 🐦 Auto-posts via Typefully API
 
