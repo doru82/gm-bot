@@ -3,6 +3,7 @@ import random
 import requests
 from datetime import datetime
 from dotenv import load_dotenv
+from openai import OpenAI
 
 load_dotenv()
 
@@ -10,7 +11,7 @@ load_dotenv()
 # CONFIGURATION
 # ========================================
 
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+XAI_API_KEY = os.getenv("XAI_API_KEY", "")
 TYPEFULLY_API_KEY = os.getenv("TYPEFULLY_API_KEY", "")
 
 # ========================================
@@ -79,14 +80,20 @@ def get_market_sentiment():
 
 
 # ========================================
-# GENERATE GM WITH CLAUDE
+# GENERATE GM WITH GROK
 # ========================================
 
 def generate_gm_post():
-    """Generate GM post using Claude API."""
+    """Generate GM post using Grok (xAI) API."""
     
-    if not ANTHROPIC_API_KEY:
-        raise ValueError("ANTHROPIC_API_KEY not found!")
+    if not XAI_API_KEY:
+        raise ValueError("XAI_API_KEY not found!")
+    
+    # Initialize xAI client
+    client = OpenAI(
+        api_key=XAI_API_KEY,
+        base_url="https://api.x.ai/v1"
+    )
     
     # Get current context
     now = datetime.now()
@@ -158,44 +165,27 @@ Now write ONE GM tweet in this exact style. Be creative, maybe reference somethi
 
 IMPORTANT: Output ONLY the tweet text, nothing else. No quotes, no explanation. Each line separated by blank lines."""
 
-    headers = {
-        "x-api-key": ANTHROPIC_API_KEY,
-        "Content-Type": "application/json",
-        "anthropic-version": "2023-06-01"
-    }
-    
-    payload = {
-        "model": "claude-sonnet-4-20250514",
-        "max_tokens": 300,
-        "messages": [
-            {"role": "user", "content": prompt}
-        ]
-    }
-    
     try:
-        response = requests.post(
-            "https://api.anthropic.com/v1/messages",
-            headers=headers,
-            json=payload,
-            timeout=30
+        response = client.chat.completions.create(
+            model="grok-4-latest",
+            messages=[
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=300,
+            temperature=0.8
         )
         
-        if response.status_code == 200:
-            data = response.json()
-            tweet = data["content"][0]["text"].strip()
-            # Clean up any quotes if AI added them
-            tweet = tweet.strip('"').strip("'")
-            # Ensure blank lines between sentences
-            lines = [line.strip() for line in tweet.split('\n') if line.strip()]
-            tweet = '\n\n'.join(lines)
-            print(f"✅ Generated GM: {tweet}")
-            return tweet
-        else:
-            print(f"❌ Claude error: {response.status_code} - {response.text}")
-            return None
+        tweet = response.choices[0].message.content.strip()
+        # Clean up any quotes if AI added them
+        tweet = tweet.strip('"').strip("'")
+        # Ensure blank lines between sentences
+        lines = [line.strip() for line in tweet.split('\n') if line.strip()]
+        tweet = '\n\n'.join(lines)
+        print(f"✅ Generated GM: {tweet}")
+        return tweet
             
     except Exception as e:
-        print(f"❌ Exception: {e}")
+        print(f"❌ Grok API error: {e}")
         return None
 
 
@@ -371,7 +361,7 @@ def run_gm_bot():
         return
     
     # 2. Generate GM post
-    print("\n📝 Generating GM post with Claude...")
+    print("\n📝 Generating GM post with Grok...")
     tweet = generate_gm_post()
     
     if not tweet:
@@ -400,8 +390,8 @@ def run_gm_bot():
 
 
 if __name__ == "__main__":
-    if not ANTHROPIC_API_KEY:
-        print("❌ ANTHROPIC_API_KEY not found!")
+    if not XAI_API_KEY:
+        print("❌ XAI_API_KEY not found!")
         exit(1)
     if not TYPEFULLY_API_KEY:
         print("❌ TYPEFULLY_API_KEY not found!")
