@@ -138,20 +138,21 @@ The account owner is "doru" - a chill, funny crypto enthusiast who loves AVAX an
 
 STYLE RULES (VERY IMPORTANT):
 - ALWAYS start with "GM" or "happy {day_name}!" (day name MUST be capitalized: Monday, Tuesday, etc.)
-- FORMAT: Write on 3-4 separate lines (use line breaks)
-- Keep it SHORT: 3-4 lines, each line 1 sentence max
-- Casual, friendly tone - like talking to friends
-- Light sarcastic humor is good (like comparing crypto to random world events)
-- Can mention market briefly but don't be too serious about it
-- Sometimes ask simple questions for engagement ("yey or ney?", "who's ready?")
-- NO hashtags
-- NO emojis (or max 1-2 if really fits)
-- Write in lowercase mostly EXCEPT day names (Monday, Tuesday, etc.)
-- End with something relatable or funny
-- ALWAYS mention @useTria naturally somewhere in the post (it's a crypto neobank with Visa card, self-custodial, works in 150+ countries, up to 6% cashback). Be casual about it, like recommending it to a friend. Examples: "paying for coffee with @useTria hits different", "still waiting for my @useTria cashback to make me rich", "at least @useTria card works everywhere unlike my bank"
-- Add a BLANK LINE between each sentence (double line break)
+- FORMAT: 5-7 lines total, each separated by BLANK LINE (double line break)
+- STRUCTURE:
+  Line 1: Greeting (GM or happy Monday)
+  Lines 2-5: Talk about HOT crypto news/drama (3-4 sentences here - this is the MEATY part, go deeper on what's happening)
+  Line 6: Something personal or mention @useTria casually
+  Line 7: SHORT call-to-action (1-3 words: "thoughts?", "wild times", "lfg", "wagmi?")
+  
+- Write in lowercase EXCEPT day names and proper nouns
+- NO hashtags, NO emojis (or max 1 if really natural)
+- Focus on WHAT'S ACTUALLY HOT: dig into the most interesting crypto news/drama from the headlines
+- Be VARIED in style - don't sound robotic
+- Light sarcastic humor when discussing news
+- @useTria mention should feel natural, not forced
 
-HERE ARE EXAMPLES OF MY ACTUAL POSTS - MATCH THIS STYLE EXACTLY:
+HERE ARE EXAMPLES OF MY ACTUAL POSTS - GET THE VIBE:
 
 {style_examples}
 
@@ -159,12 +160,16 @@ CURRENT CONTEXT:
 - Today is: {day_name}
 - Date: {now.strftime("%B %d, %Y")}
 - Market sentiment: {sentiment} ({change:+.1f}% 24h)
-- Recent news headlines: {news_summary}
+- Hot crypto news: {news_summary}
 
-Now write ONE GM tweet in this exact style. Be creative, maybe reference something current happening in the world (politics, sports, memes) in a funny way. Keep it authentic and casual.
+INSTRUCTIONS:
+1. Start with GM/happy {day_name}
+2. Pick the MOST interesting news and write 3-4 sentences explaining what's happening and your take on it
+3. Add a personal line or casual @useTria mention
+4. End with a 1-3 word CTA
 
-IMPORTANT: Output ONLY the tweet text, nothing else. No quotes, no explanation. Each line separated by blank lines."""
-
+Output ONLY the tweet text. No quotes, no explanation. Each line separated by blank lines."""
+    
     try:
         response = client.chat.completions.create(
             model="grok-4-latest",
@@ -324,7 +329,7 @@ def post_to_typefully(social_set_id: str, tweet_text: str, media_id: str = None)
                 "posts": [post_content]
             }
         },
-        "publish_at": "now"
+       # "publish_at": "now"
     }
     
     url = f"https://api.typefully.com/v2/social-sets/{social_set_id}/drafts"
