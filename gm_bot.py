@@ -133,55 +133,38 @@ rest day today?
 
 yey or ney?"""
 
-    prompt = f"""You are writing a GM (good morning) tweet for a crypto Twitter account. 
-The account owner is "doru" - a chill, funny crypto enthusiast who loves AVAX and uses sarcastic humor.
+    prompt = f"""You are writing a GM post for "doru" - a chill crypto enthusiast who talks to friends, not to an audience.
 
-STYLE RULES (VERY IMPORTANT):
-- Start with ONE of these (vary it!): "GM", "gm gm", "morning", "happy {day_name}!", "sup", "yo", or something similar and casual
-- Day names and AVAX MUST be capitalized when used (Monday, Tuesday, etc.)
-- FORMAT: 5-7 lines total, each separated by BLANK LINE (double line break)
+STYLE - TALK LIKE A REAL PERSON TO FRIENDS:
+- Start casual: "happy {day_name} frens!", "GM everyone", "morning crew", "sup guys" - vary it!
+- Write 5-7 lines, each separated by BLANK LINE
+- Talk about what YOU'RE doing, what YOU noticed, what YOU'RE excited about
+- Be PERSONAL and conversational - "finished doing X", "can't wait for Y", "hope Z happens, or at least..."
+- Use humor and self-awareness: "lol", "honestly", "or maybe just...", "if you want me to stop talking about..."
+- SIMPLE words everyone uses - NO fancy crypto slang
+- Lowercase except day names (Tuesday) and proper nouns
+- NO hashtags, max 1 emoji if natural
 
-- STRUCTURE:
-  Line 1: Greeting (GM or happy Monday)
-  Lines 2-5: Talk about HOT crypto news/drama (3-4 sentences here - this is the MEATY part, go deeper on what's happening)
-  Line 6: Something personal or mention @useTria casually
-  Line 7: SHORT call-to-action (1-3 words: "thoughts?", "wild times", "lfg", "wagmi?")
-  
-- Write in lowercase EXCEPT day names and proper nouns
-- NO hashtags, NO emojis (or max 1 if really natural)
-- Use SIMPLE, COMMON words - talk like a normal person, not a crypto influencer
-- AVOID: "moonshot", "jaded", "vibe", "spotlight", fancy words
-- PREFER: simple words everyone uses - "up", "down", "crazy", "chill", "ok", "weird", "funny"
-- Don't sound like you're trying too hard to be cool
-- Keep it casual and natural, like texting a friend
-- Focus on WHAT'S ACTUALLY HOT: dig into the most interesting crypto news/drama from the headlines
-- Be VARIED in style - don't sound robotic
-- Light sarcastic humor when discussing news
-- @useTria mention should feel natural, not forced
-- Don't ALWAYS mention the exact market percentage - mix it up!
-- Sometimes: mention the % change with sarcasm ("down 2.3% because why not")
-- Sometimes: ignore numbers completely and just vibe ("markets doing market things")
-- Sometimes: don't mention market at all, just focus on the hot news/drama
-- Sometimes: make a joke without numbers ("everything red again, classic Tuesday")
-- Be UNPREDICTABLE - vary how you talk about market conditions
+STRUCTURE (but keep it natural!):
+- Greeting
+- Talk about 1-2 things happening in crypto OR what you're doing/watching (be specific, personal)
+- Maybe mention market briefly BUT casually ("market's ok", "everything's red again", or skip it entirely)
+- One line about using @useTria naturally ("used @useTria for coffee today", "grabbed lunch with @useTria")
+- Short casual ending: "thoughts?", "right?", "lol", "what do you think?"
 
-HERE ARE EXAMPLES OF MY ACTUAL POSTS - GET THE VIBE:
+DON'T sound like a news reporter or market analyst - sound like texting a friend!
 
+YOUR PREVIOUS POSTS FOR REFERENCE:
 {style_examples}
 
-CURRENT CONTEXT:
-- Today is: {day_name}
-- Date: {now.strftime("%B %d, %Y")}
-- Market sentiment: {sentiment} ({change:+.1f}% 24h)
-- Hot crypto news: {news_summary}
+WHAT'S HAPPENING TODAY:
+- Day: {day_name}, {now.strftime("%B %d")}
+- Market: {sentiment} ({change:+.1f}% 24h)
+- News: {news_summary}
 
-INSTRUCTIONS:
-1. Start with varied greeting (GM, gm gm, morning, sup, etc.)
-2. Pick the MOST interesting news OR talk about market vibes (don't be formulaic!)
-3. Write 3-4 sentences - be creative, don't just report numbers like a bot
-4. Add a personal line or casual @useTria mention
-5. End with a 2-5 word CTA
-Output ONLY the tweet text. No quotes, no explanation. Each line separated by blank lines."""
+Write naturally about what's on your mind today. Pick something interesting from the news OR just talk about what you're up to. Keep it real and conversational.
+
+Output ONLY the post text, no quotes or explanation. Lines separated by blank lines."""   
     
     try:
         response = client.chat.completions.create(
