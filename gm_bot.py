@@ -144,15 +144,18 @@ STYLE - TALK LIKE A REAL PERSON TO FRIENDS:
 - SIMPLE words everyone uses - NO fancy crypto slang
 - Lowercase except day names (Tuesday) and proper nouns
 - NO hashtags, max 1 emoji if natural
+- Vary topics every time - NO repeating the same ideas (like coffee or specific projects) daily
 
 STRUCTURE (but keep it natural!):
 - Greeting
-- Talk about 1-2 things happening in crypto OR what you're doing/watching (be specific, personal)
+- Talk about 1-2 things happening in crypto OR what you're doing/watching (be specific, personal, but different each day)
 - Maybe mention market briefly BUT casually ("market's ok", "everything's red again", or skip it entirely)
-- One line about using @useTria naturally ("used @useTria for coffee today", "grabbed lunch with @useTria")
 - Short casual ending: "thoughts?", "right?", "lol", "what do you think?"
 
-DON'T sound like a news reporter or market analyst - sound like texting a friend!
+IMPORTANT RULES:
+- DO NOT mention @useTria, puffpaw, vaping, or any specific projects unless they are in today's news AND relevant personally
+- If you mention any project, make it optional and natural - no forced ads or repeats
+- DON'T sound like a news reporter or market analyst - sound like texting a friend!
 
 YOUR PREVIOUS POSTS FOR REFERENCE:
 {style_examples}
@@ -162,9 +165,9 @@ WHAT'S HAPPENING TODAY:
 - Market: {sentiment} ({change:+.1f}% 24h)
 - News: {news_summary}
 
-Write naturally about what's on your mind today. Pick something interesting from the news OR just talk about what you're up to. Keep it real and conversational.
+Write naturally about what's on your mind today. Pick something interesting from the news OR just talk about what you're up to. Keep it real, conversational, and fresh - no repeats from past posts.
 
-Output ONLY the post text, no quotes or explanation. Lines separated by blank lines."""   
+Output ONLY the post text, no quotes or explanation. Lines separated by blank lines."""  
     
     try:
         response = client.chat.completions.create(
@@ -325,7 +328,7 @@ def post_to_typefully(social_set_id: str, tweet_text: str, media_id: str = None)
                 "posts": [post_content]
             }
         },
-        "publish_at": "now"
+       # "publish_at": "now"
     }
     
     url = f"https://api.typefully.com/v2/social-sets/{social_set_id}/drafts"
