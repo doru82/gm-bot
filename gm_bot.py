@@ -97,57 +97,62 @@ def generate_gm_post():
     now = datetime.now()
     day_name = now.strftime("%A")
     
-    # Load my posts for style reference
-    my_posts = load_my_posts()
-    if my_posts:
-        sample_posts = random.sample(my_posts, min(10, len(my_posts)))
-        style_examples = "\n\n---\n\n".join(sample_posts)
-    else:
-        style_examples = ""
-    
     # Random Tria mention (20% chance)
     tria_instruction = ""
     if random.random() < 0.2:
-        tria_instruction = "Somewhere in the post, mention @useTria casually - like you used it for something (coffee, lunch, shopping, whatever fits naturally). Don't force it."
+        tria_instruction = "\n- Mention @useTria once, casually, like you used it for something today"
     
-    prompt = f"""Look at Crypto Twitter from the last 24 hours. What are the 2-3 hottest topics people are actually talking about? Could be drama, launches, market moves, memes, debates - whatever CT is buzzing about RIGHT NOW.
+    prompt = f"""Search Crypto Twitter for the 2-3 hottest topics from the last 24 hours. What's everyone actually talking about? Drama, launches, narratives, debates, memes, price action, whatever is trending NOW.
 
-Write a GM post about it in MY style. Study these examples of how I write:
+Write a GM post as @doruOlt about these topics.
 
-{style_examples}
+MY STYLE (copy this exactly):
+- Use :))) not lol
+- Use "lezgo" not "let's go"  
+- Use "frens" not "friends"
+- Use "..." for pauses, NEVER em-dash (—)
+- Lowercase mostly, except proper nouns and day names
+- Self-deprecating humor ("Basically unstoppable" when I have nothing)
+- Concrete numbers when relevant ("dropped 50 spots overnight", "30k down the drain")
+- I mention projects I actually use: @puffpaw, @avax, @letsCatapult, @wallchain_xyz
+- Sometimes mix in Romanian: "doamne ajuta", "hai sa mergem"
+- Endings: "see ya!", "have a good one!", or just leave it
 
-MY STYLE:
-- Casual, talking to friends not an audience
-- Short lines with blank lines between them
-- Lowercase mostly (except proper nouns)
-- Light humor, self-aware, not tryhard
-- I have opinions but I'm chill about them
-- Simple words, no crypto jargon flex
-- Sometimes I ask what others think, sometimes I don't
-- NO hashtags, minimal emojis (0-1)
+STRUCTURE (5-7 short lines, blank line between each):
+- Greeting with emoji (vary it: "happy {day_name}!", "GM frens!", "hey {day_name} crew!")
+- 2-3 lines about what's hot on CT right now (have an opinion, don't just summarize)
+- Maybe what I'm doing today (grinding, building, watching charts, whatever)
+- Short closing{tria_instruction}
 
-TODAY: {day_name}, {now.strftime("%B %d")}
+HARD RULES:
+- NEVER use em-dash (—), use ... instead
+- NEVER sound like a news reporter or analyst
+- NEVER use "here's what's happening" or "let's dive into"
+- NO hashtags
+- Max 1-2 emojis total
+- Talk like you're texting frens, not posting content
 
-{tria_instruction}
+BAD EXAMPLE (don't do this):
+"crypto twitter is wild today with the $ETH price pump—everyone's either flexing gains or crying"
 
-IMPORTANT:
-- Talk about what's ACTUALLY happening on CT right now
-- Have a take on it, don't just summarize
-- Vary the structure - don't always start with "gm", don't always end with a question
-- 4-7 lines max, each separated by blank line
+GOOD EXAMPLE (do this):
+"CT going crazy over ETH pump... half my timeline flexing, other half in shambles :))) tale as old as time"
 
-Output ONLY the post. No quotes, no explanation."""
+Output ONLY the post text. No quotes, no explanation."""
 
     try:
         response = client.chat.completions.create(
             model="grok-3-latest",
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=300,
-            temperature=0.9
+            max_tokens=350,
+            temperature=0.85
         )
         
         tweet = response.choices[0].message.content.strip()
         tweet = tweet.strip('"').strip("'")
+        # Remove any em-dashes that slipped through
+        tweet = tweet.replace("—", "...")
+        tweet = tweet.replace("–", "...")
         lines = [line.strip() for line in tweet.split('\n') if line.strip()]
         tweet = '\n\n'.join(lines)
         print(f"✅ Generated GM: {tweet}")
@@ -156,7 +161,6 @@ Output ONLY the post. No quotes, no explanation."""
     except Exception as e:
         print(f"❌ Grok API error: {e}")
         return None
-
 
 # ========================================
 # IMAGE HANDLING
