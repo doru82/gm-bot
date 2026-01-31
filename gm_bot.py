@@ -114,9 +114,8 @@ MY STYLE (copy this exactly):
 - Lowercase mostly, except proper nouns and day names
 - Self-deprecating humor ("Basically unstoppable" when I have nothing)
 - Concrete numbers when relevant ("dropped 50 spots overnight", "30k down the drain")
-- I mention projects I actually use: @puffpaw, @avax, @letsCatapult, @wallchain_xyz
-- Sometimes mix in Romanian: "doamne ajuta", "hai sa mergem"
-- Endings: "see ya!", "have a good one!", or just leave it
+- I mention projects I actually use: @puffpaw, @avax
+- Endings: "wattabatu?", "have a good one!", or just leave it
 
 STRUCTURE (5-7 short lines, blank line between each):
 - Greeting with emoji (vary it: "happy {day_name}!", "GM frens!", "hey {day_name} crew!")
