@@ -1,9 +1,12 @@
 import os
 import random
 import requests
-from datetime import datetime
+import time
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
-from openai import OpenAI
+from xai_sdk import Client
+from xai_sdk.chat import user
+from xai_sdk.tools import x_search
 
 load_dotenv()
 
@@ -15,151 +18,88 @@ XAI_API_KEY = os.getenv("XAI_API_KEY", "")
 TYPEFULLY_API_KEY = os.getenv("TYPEFULLY_API_KEY", "")
 
 # ========================================
-# LOAD MY POSTS (for style reference)
-# ========================================
-
-def load_my_posts():
-    """Load posts from my_posts.txt for style reference."""
-    posts_file = os.path.join(os.path.dirname(__file__), "my_posts.txt")
-    
-    if os.path.exists(posts_file):
-        with open(posts_file, "r", encoding="utf-8") as f:
-            content = f.read()
-            posts = content.split("---")
-            posts = [p.strip() for p in posts if p.strip()]
-            print(f"📝 Loaded {len(posts)} example posts from my_posts.txt")
-            return posts
-    else:
-        print("⚠️ my_posts.txt not found, using default examples")
-        return []
-
-# ========================================
-# FETCH CRYPTO NEWS
-# ========================================
-
-def get_crypto_news():
-    """Fetch latest crypto news from CryptoPanic (free, no API key needed for basic)."""
-    try:
-        url = "https://cryptopanic.com/api/free/v1/posts/?public=true"
-        response = requests.get(url, timeout=10)
-        
-        if response.status_code == 200:
-            data = response.json()
-            news = []
-            for item in data.get("results", [])[:5]:
-                news.append(item.get("title", ""))
-            return news
-        return []
-    except Exception as e:
-        print(f"Error fetching news: {e}")
-        return []
-
-
-def get_market_sentiment():
-    """Get basic market data from CoinGecko (free)."""
-    try:
-        url = "https://api.coingecko.com/api/v3/global"
-        response = requests.get(url, timeout=10)
-        
-        if response.status_code == 200:
-            data = response.json().get("data", {})
-            market_cap_change = data.get("market_cap_change_percentage_24h_usd", 0)
-            
-            if market_cap_change > 3:
-                return "bullish", market_cap_change
-            elif market_cap_change > 0:
-                return "slightly up", market_cap_change
-            elif market_cap_change > -3:
-                return "slightly down", market_cap_change
-            else:
-                return "bearish", market_cap_change
-        return "neutral", 0
-    except Exception as e:
-        print(f"Error fetching market data: {e}")
-        return "neutral", 0
-
-
-# ========================================
-# GENERATE GM WITH GROK
+# GENERATE GM WITH GROK + X SEARCH
 # ========================================
 
 def generate_gm_post():
-    """Generate GM post using Grok (xAI) API."""
+    """Generate GM post using Grok with live X search."""
     
     if not XAI_API_KEY:
         raise ValueError("XAI_API_KEY not found!")
     
-    client = OpenAI(
-        api_key=XAI_API_KEY,
-        base_url="https://api.x.ai/v1"
-    )
+    client = Client(api_key=XAI_API_KEY)
     
     now = datetime.now()
     day_name = now.strftime("%A")
+    yesterday = now - timedelta(days=1)
     
     # Random Tria mention (20% chance)
     tria_instruction = ""
     if random.random() < 0.2:
         tria_instruction = "\n- Mention @useTria once, casually, like you used it for something today"
     
-    prompt = f"""Search Crypto Twitter for the 2-3 hottest topics from the last 24 hours. What's everyone actually talking about? Drama, launches, narratives, debates, memes, price action, whatever is trending NOW.
+    prompt = f"""Search X/Twitter for the 2-3 hottest crypto topics from the last 24 hours. Look for:
+- Trending narratives (AI agents, memecoins, L2s, whatever is HOT right now)
+- Drama or debates
+- Big launches or announcements
+- What crypto twitter is actually talking about
 
-Write a GM post as @doruOlt about these topics.
+Then write a GM post as @doruOlt about these SPECIFIC topics you found.
 
 MY STYLE (copy this exactly):
 - Use :))) not lol
 - Use "lezgo" not "let's go"  
 - Use "frens" not "friends"
-- Use "..." for pauses, NEVER em-dash (—)
+- Use "..." for pauses, NEVER use em-dash (—)
 - Lowercase mostly, except proper nouns and day names
-- Self-deprecating humor ("Basically unstoppable" when I have nothing)
-- Concrete numbers when relevant ("dropped 50 spots overnight", "30k down the drain")
-- I mention projects I actually use: @puffpaw, @avax
-- Endings: "wattabatu?", "have a good one!", or just leave it
+- Self-deprecating humor
+- Concrete numbers when relevant
+- Projects I care about: @puffpaw, @avax, @letsCatapult, @wallchain_xyz
+- Sometimes Romanian: "doamne ajuta", "hai sa mergem"
+- Endings: "see ya!", "have a good one!", or just leave it
 
 STRUCTURE (5-7 short lines, blank line between each):
 - Greeting with emoji (vary it: "happy {day_name}!", "GM frens!", "hey {day_name} crew!")
-- 2-3 lines about what's hot on CT right now (have an opinion, don't just summarize)
-- Maybe what I'm doing today (grinding, building, watching charts, whatever)
+- 2-3 lines about the SPECIFIC hot topics you found on X (have an opinion, reference what you actually found)
+- Maybe what I'm doing today
 - Short closing{tria_instruction}
 
 HARD RULES:
 - NEVER use em-dash (—), use ... instead
-- NEVER sound like a news reporter or analyst
-- NEVER use "here's what's happening" or "let's dive into"
-- NO hashtags
-- Max 1-2 emojis total
-- Talk like you're texting frens, not posting content
+- NEVER sound like a news reporter
+- Reference the ACTUAL trending topics you found
+- NO hashtags, max 1-2 emojis
 
-BAD EXAMPLE (don't do this):
-"crypto twitter is wild today with the $ETH price pump—everyone's either flexing gains or crying"
-
-GOOD EXAMPLE (do this):
-"CT going crazy over ETH pump... half my timeline flexing, other half in shambles :))) tale as old as time"
-
-Output ONLY the post text. No quotes, no explanation."""
+Output ONLY the post text."""
 
     try:
-        response = client.chat.completions.create(
-            model="grok-3-latest",
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=350,
-            temperature=0.85
+        chat = client.chat.create(
+            model="grok-4-1-fast",
+            tools=[
+                x_search(
+                    from_date=yesterday,
+                    to_date=now,
+                ),
+            ],
         )
         
-        tweet = response.choices[0].message.content.strip()
+        chat.append(user(prompt))
+        response = chat.sample()
+        
+        tweet = response.content.strip()
         tweet = tweet.strip('"').strip("'")
-        # Remove any em-dashes that slipped through
         tweet = tweet.replace("—", "...")
         tweet = tweet.replace("–", "...")
         lines = [line.strip() for line in tweet.split('\n') if line.strip()]
         tweet = '\n\n'.join(lines)
+        
         print(f"✅ Generated GM: {tweet}")
         return tweet
             
     except Exception as e:
         print(f"❌ Grok API error: {e}")
         return None
+
 
 # ========================================
 # IMAGE HANDLING
@@ -193,7 +133,6 @@ def upload_image_to_typefully(social_set_id: str, image_path: str) -> str:
         "Content-Type": "application/json"
     }
     
-    # Step 1: Get upload URL
     file_name = os.path.basename(image_path)
     
     response = requests.post(
@@ -211,22 +150,14 @@ def upload_image_to_typefully(social_set_id: str, image_path: str) -> str:
     media_id = data.get("media_id")
     upload_url = data.get("upload_url")
     
-    # Step 2: Upload the file
     with open(image_path, "rb") as f:
         file_data = f.read()
-        
-        upload_response = requests.put(
-            upload_url,
-            data=file_data,
-            timeout=30
-        )
+        upload_response = requests.put(upload_url, data=file_data, timeout=30)
         
         if upload_response.status_code not in [200, 201]:
             print(f"❌ Failed to upload image: {upload_response.status_code}")
             return None
     
-    # Step 3: Wait for processing
-    import time
     for _ in range(10):
         status_response = requests.get(
             f"https://api.typefully.com/v2/social-sets/{social_set_id}/media/{media_id}",
@@ -296,7 +227,7 @@ def post_to_typefully(social_set_id: str, tweet_text: str, media_id: str = None)
                 "posts": [post_content]
             }
         },
-        #"publish_at": "now"
+        "publish_at": "now"
     }
     
     url = f"https://api.typefully.com/v2/social-sets/{social_set_id}/drafts"
@@ -325,22 +256,19 @@ def run_gm_bot():
     
     print(f"🌅 GM Bot starting at {datetime.now()}\n")
     
-    # 1. Get social set ID
     try:
         social_set_id = get_social_set_id()
     except Exception as e:
         print(f"❌ Failed to get social set ID: {e}")
         return
     
-    # 2. Generate GM post
-    print("\n📝 Generating GM post with Grok...")
+    print("\n📝 Generating GM post with Grok + X Search...")
     tweet = generate_gm_post()
     
     if not tweet:
         print("❌ Failed to generate tweet")
         return
     
-    # 3. Get random image
     print("\n🖼️ Selecting random image...")
     image_path = get_random_image()
     
@@ -348,7 +276,6 @@ def run_gm_bot():
     if image_path:
         media_id = upload_image_to_typefully(social_set_id, image_path)
     
-    # 4. Post
     print("\n📤 Posting to X...")
     print(f"Tweet: {tweet}")
     print(f"Image: {'Yes' if media_id else 'No'}")
