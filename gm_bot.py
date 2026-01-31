@@ -38,7 +38,7 @@ def generate_gm_post():
     if random.random() < 0.2:
         tria_instruction = "\n- Mention @useTria once, casually, like you used it for something today"
     
-   prompt = f"""Search X/Twitter for what crypto twitter is talking about in the last 24 hours. Find the main narrative or drama everyone is buzzing about.
+    prompt = f"""Search X/Twitter for what crypto twitter is talking about in the last 24 hours. Find the main narrative or drama everyone is buzzing about.
 
 Write a GM post as @doruOlt about it.
 
