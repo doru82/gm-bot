@@ -89,101 +89,65 @@ def generate_gm_post():
     if not XAI_API_KEY:
         raise ValueError("XAI_API_KEY not found!")
     
-    # Initialize xAI client
     client = OpenAI(
         api_key=XAI_API_KEY,
         base_url="https://api.x.ai/v1"
     )
     
-    # Get current context
     now = datetime.now()
-    day_name = now.strftime("%A")  # Monday, Tuesday, etc.
-    
-    # Get market info
-    sentiment, change = get_market_sentiment()
-    news = get_crypto_news()
-    news_summary = "\n".join(news[:3]) if news else "No major news today"
+    day_name = now.strftime("%A")
     
     # Load my posts for style reference
     my_posts = load_my_posts()
     if my_posts:
-        # Pick random 5-7 posts as examples
-        sample_posts = random.sample(my_posts, min(7, len(my_posts)))
+        sample_posts = random.sample(my_posts, min(10, len(my_posts)))
         style_examples = "\n\n---\n\n".join(sample_posts)
     else:
-        style_examples = """GM
+        style_examples = ""
+    
+    # Random Tria mention (20% chance)
+    tria_instruction = ""
+    if random.random() < 0.2:
+        tria_instruction = "Somewhere in the post, mention @useTria casually - like you used it for something (coffee, lunch, shopping, whatever fits naturally). Don't force it."
+    
+    prompt = f"""Look at Crypto Twitter from the last 24 hours. What are the 2-3 hottest topics people are actually talking about? Could be drama, launches, market moves, memes, debates - whatever CT is buzzing about RIGHT NOW.
 
-we are here atm, that means we can happily touch grass today
+Write a GM post about it in MY style. Study these examples of how I write:
 
-I'll try to do that as well
-
----
-
-happy Monday!
-
-let's spread some good vibes like usa spreading democracy
-
-market looks ok ish, hope this trend will last more than Madurro
-
----
-
-GM
-
-rest day today?
-
-yey or ney?"""
-
-    prompt = f"""You are writing a GM post for "doru" - a chill crypto enthusiast who talks to friends, not to an audience.
-
-STYLE - TALK LIKE A REAL PERSON TO FRIENDS:
-- Start casual: "happy {day_name} frens!", "GM everyone", "morning crew", "sup guys" - vary it!
-- Write 5-7 lines, each separated by BLANK LINE
-- Talk about what YOU'RE doing, what YOU noticed, what YOU'RE excited about
-- Be PERSONAL and conversational - "finished doing X", "can't wait for Y", "hope Z happens, or at least..."
-- Use humor and self-awareness: "lol", "honestly", "or maybe just...", "if you want me to stop talking about..."
-- SIMPLE words everyone uses - NO fancy crypto slang
-- Lowercase except day names (Tuesday) and proper nouns
-- NO hashtags, max 1 emoji if natural
-- Vary topics every time - NO repeating the same ideas (like coffee or specific projects) daily
-
-STRUCTURE (but keep it natural!):
-- Greeting
-- Talk about 1-2 things happening in crypto OR what you're doing/watching (be specific, personal, but different each day)
-- Maybe mention market briefly BUT casually ("market's ok", "everything's red again", or skip it entirely)
-- Optionally, one line about using @useTria naturally (e.g., "tried @useTria for something new today", vary the activity - shopping, lunch, crypto stuff, but keep it casual and different each time)
-- Short casual ending: "thoughts?", "right?", "lol", "what do you think?"
-
-IMPORTANT RULES:
-- If mentioning @useTria, make it optional, natural, and varied - NO repeats like daily coffee; tie it to what's on your mind or news if fits
-- DO NOT mention puffpaw, vaping, or other specific projects unless they are in today's news AND relevant personally
-- DON'T sound like a news reporter or market analyst - sound like texting a friend!
-
-YOUR PREVIOUS POSTS FOR REFERENCE:
 {style_examples}
 
-WHAT'S HAPPENING TODAY:
-- Day: {day_name}, {now.strftime("%B %d")}
-- Market: {sentiment} ({change:+.1f}% 24h)
-- News: {news_summary}
+MY STYLE:
+- Casual, talking to friends not an audience
+- Short lines with blank lines between them
+- Lowercase mostly (except proper nouns)
+- Light humor, self-aware, not tryhard
+- I have opinions but I'm chill about them
+- Simple words, no crypto jargon flex
+- Sometimes I ask what others think, sometimes I don't
+- NO hashtags, minimal emojis (0-1)
 
-Write naturally about what's on your mind today. Pick something interesting from the news OR just talk about what you're up to. Keep it real, conversational, and fresh - no repeats from past posts.
+TODAY: {day_name}, {now.strftime("%B %d")}
 
-Output ONLY the post text, no quotes or explanation. Lines separated by blank lines."""  
-    
+{tria_instruction}
+
+IMPORTANT:
+- Talk about what's ACTUALLY happening on CT right now
+- Have a take on it, don't just summarize
+- Vary the structure - don't always start with "gm", don't always end with a question
+- 4-7 lines max, each separated by blank line
+
+Output ONLY the post. No quotes, no explanation."""
+
     try:
         response = client.chat.completions.create(
-            model="grok-4-latest",
-            messages=[
-                {"role": "user", "content": prompt}
-            ],
+            model="grok-3-latest",
+            messages=[{"role": "user", "content": prompt}],
             max_tokens=300,
-            temperature=0.8
+            temperature=0.9
         )
         
         tweet = response.choices[0].message.content.strip()
-        # Clean up any quotes if AI added them
         tweet = tweet.strip('"').strip("'")
-        # Ensure blank lines between sentences
         lines = [line.strip() for line in tweet.split('\n') if line.strip()]
         tweet = '\n\n'.join(lines)
         print(f"✅ Generated GM: {tweet}")
@@ -329,7 +293,7 @@ def post_to_typefully(social_set_id: str, tweet_text: str, media_id: str = None)
                 "posts": [post_content]
             }
         },
-        "publish_at": "now"
+        #"publish_at": "now"
     }
     
     url = f"https://api.typefully.com/v2/social-sets/{social_set_id}/drafts"
