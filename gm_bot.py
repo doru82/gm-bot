@@ -54,20 +54,26 @@ MY STYLE (copy this exactly):
 - Lowercase mostly, except proper nouns and day names
 - Self-deprecating humor
 - Concrete numbers when relevant
-- Projects I care about: @puffpaw, @avax, @letsCatapult, @wallchain_xyz
-- Sometimes Romanian: "doamne ajuta", "hai sa mergem"
 - Endings: "see ya!", "have a good one!", or just leave it
+
+ONLY THESE @mentions allowed (use sparingly, only if relevant):
+- @puffpaw
+- @avax
+- @useTria (only if Tria instruction below)
+DO NOT invent or use any other @handles.
 
 STRUCTURE (5-7 short lines, blank line between each):
 - Greeting with emoji (vary it: "happy {day_name}!", "GM frens!", "hey {day_name} crew!")
-- 2-3 lines about the SPECIFIC hot topics you found on X (have an opinion, reference what you actually found)
+- 2-3 lines about the SPECIFIC hot topics you found on X (have an opinion, don't just summarize)
 - Maybe what I'm doing today
 - Short closing{tria_instruction}
 
 HARD RULES:
 - NEVER use em-dash (—), use ... instead
+- NEVER include URLs or links
+- NEVER use Romanian words or expressions
+- NEVER invent @handles, only use the allowed list above
 - NEVER sound like a news reporter
-- Reference the ACTUAL trending topics you found
 - NO hashtags, max 1-2 emojis
 
 Output ONLY the post text."""
