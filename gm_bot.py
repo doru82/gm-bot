@@ -97,7 +97,6 @@ EXAMPLE (this is the vibe):
 
 market red again but vibes up, we've seen worse
 
-- @useTria season 2 going strong, TGE soon?
 - @puffpaw x Polymarket campaign is interesting
 - @avax ecosystem building while others sleep
 
@@ -108,7 +107,6 @@ grinding some leaderboards today
 what's your play frens?"
 
 @MENTIONS ALLOWED (only use if you found real content):
-- @useTria
 - @puffpaw  
 - @avax
 - @vohvohh, @xerocooleth, @waleswoosh, @0xSammy
@@ -123,8 +121,6 @@ HARD RULES:
 - ALWAYS use bullet points (•) for lists
 - ALWAYS use day-appropriate greeting
 - Max 1 emoji in greeting, none elsewhere
-
-{tria_instruction}
 
 Output ONLY the post text."""
     
