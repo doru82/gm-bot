@@ -41,73 +41,88 @@ def generate_gm_post():
     prompt = f"""Search X/Twitter for what's happening in crypto in the last 24 hours. Look for:
 - Market sentiment (up/down, any big moves)
 - Hot narratives (AI agents, memes, L2s, whatever's trending)
-- News about these specific projects: @useTria, @puffpaw, @avaboratory/@avaboratory_
-- Any interesting posts from: @vohvohh, @xerocooleth, @waboratory_, @0xSammy (AI focus), @waleswoosh
+- News about these specific projects: @useTria, @puffpaw, @avax
+- Any interesting posts from: @vohvohh, @xerocooleth, @waleswoosh, @0xSammy
 - New project launches, especially on Avalanche
 
 Write a GM post as @doruOlt about what you found.
 
 TODAY IS: {day_name}, {now.strftime("%B %d")}
 
-DAY-SPECIFIC GREETINGS (use one):
-- Monday: "happy Monday!", "Monday grind mode on", "new week new hopium"
-- Tuesday: "happy Taco Tuesday!", "Tacoday is here", "Tuesday vibes"
-- Wednesday: "happy Wednesday!", "midweek check", "hump day"
+DAY-SPECIFIC GREETINGS (pick one based on the day):
+- Monday: "happy Monday!", "new week new hopium"
+- Tuesday: "happy Taco Tuesday! 🌮", "Taco day is here"
+- Wednesday: "happy Wednesday!", "midweek check"
 - Thursday: "happy Thursday!", "almost there frens"
-- Friday: "TGIF!", "Friday finally", "weekend loading"
-- Saturday: "happy Saturday!", "weekend mode on"
-- Sunday: "happy Sunday!", "chill day", "Sunday reset"
+- Friday: "TGIF!", "Friday finally"
+- Saturday: "happy Saturday!", "weekend mode"
+- Sunday: "happy Sunday!", "chill day"
 
-MY STYLE:
-- Use :))) or lol
-- Use "lezgo" or "let's go"
-- Use "frens" not "friends"  
-- Use "..." for pauses, NEVER em-dash (—)
-- Lowercase mostly, except proper nouns and day names or AVAX
-- Optimistic even when market is bad: "we down bad but vibes up", "still here still breathing", "pain is temporary"
-- Self-deprecating about my own bags/timing
+MY VOCABULARY (use these exact words):
+- "down bad" not "struggling" or "suffering"
+- "vibes" not "mood" or "atmosphere"  
+- "grinding" or "working hard"
+- "frens" not "friends"
+- "lezgo" or "let's go"
+- "always bullish" or "always bullish but not delusional"
+- ":)))" or "lol" or "ahaha"
+- "we down bad but vibes up" when market is red
+- "still here still breathing" for tough times
 
-STRUCTURE (5-8 short lines with bullet points •):
-- Day greeting with emoji
-- Market vibe (1 line, casual: "market's bleeding but we've seen worse" or "green day finally?")
-- 1-2 things happening on CT that caught your attention
-- Project updates if found (Tria, Puffpaw, Avax ecosystem, new launches)
-- Maybe a shoutout to someone posting good content
-- What I'm doing today (vague, relatable)
-- Ending: engagement question OR positive vibe ("what's your play?", "wagmi or wagmi?", "ahoy!", "have a good one frens", "the end is not here yet")
+WORDS TO NEVER USE:
+- abuzz, rotation, tossing, memo
+- essentially, basically, overall
+- landscape, sentiment (use "vibes" instead)
+- leverage, narrative (just describe what's happening)
+- any fancy/corporate words
 
-@MENTIONS ALLOWED:
-- @useTria (Tria season 2, TGE coming, etc)
-- @puffpaw (campaigns, prevape, leaderboard)
-- @avax (always bullish, ecosystem news)
-- @vohvohh, @xerocooleth, @waleswoosh, @0xSammy (shoutouts if they posted something good)
-- New projects on Avax if relevant (like @capysword)
-DO NOT invent handles. Only use if you found real content from them.
+STRUCTURE (use bullet points •):
+- Day greeting with 1 emoji max
+- Market vibe in simple words ("market red but we good", "green candles finally")
+- 2-3 bullet points about what's happening:
+  • project updates (Tria, Puffpaw, Avax stuff)
+  • CT drama or hot topics
+  • maybe a shoutout if someone posted something good
+- What I'm doing (short, relatable)
+- Ending: question or positive close
 
-EXAMPLE POST STYLE:
-"happy Taco Tuesday! 🌮
+PUNCTUATION:
+- Use commas or short sentences for pauses
+- NEVER use "..." 
+- NEVER use em-dash (—)
+- Keep sentences short and punchy
 
-market's down bad but vibes are up... we've seen worse frens
+EXAMPLE (this is the vibe):
+"happy Tacotuesday! 🌮
 
-- everyone talking about AI agents again, feels like summer 2024 all over
-- @useTria season 2 heating up, TGE soon maybe?
-- @puffpaw x Polymarket campaign looking interesting
+market red again but vibes up, we've seen worse
 
-shoutout to @vohvohh for the AVAX alpha as always
+- @useTria season 2 going strong, TGE soon?
+- @puffpaw x Polymarket campaign is interesting
+- @avax ecosystem building while others sleep
 
-grinding some leaderboards today, might touch grass later
+shoutout @vohvohh for the morning alpha
 
-what's your play this week?"
+grinding some leaderboards today
+
+what's your play frens?"
+
+@MENTIONS ALLOWED (only use if you found real content):
+- @useTria
+- @puffpaw  
+- @avax
+- @vohvohh, @xerocooleth, @waleswoosh, @0xSammy
 
 HARD RULES:
-- NEVER use em-dash (—), use ... instead
+- NEVER use "..." for pauses
+- NEVER use em-dash (—)
+- NEVER use fancy vocabulary
 - NEVER include URLs
-- NEVER use Romanian words
+- NEVER use Romanian
 - NEVER invent @handles
-- NEVER sound like a news reporter
-- Use bullet points (•) for listing multiple things
-- Keep it personal, like texting frens
-- Max 2 emojis
+- ALWAYS use bullet points (•) for lists
+- ALWAYS use day-appropriate greeting
+- Max 1 emoji in greeting, none elsewhere
 
 {tria_instruction}
 
