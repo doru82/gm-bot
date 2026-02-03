@@ -38,49 +38,81 @@ def generate_gm_post():
     if random.random() < 0.2:
         tria_instruction = "\n- Mention @useTria once, casually, like you used it for something today"
     
-    prompt = f"""Search X/Twitter for what crypto twitter is talking about in the last 24 hours. Find the main narrative or drama everyone is buzzing about.
+    prompt = f"""Search X/Twitter for what's happening in crypto in the last 24 hours. Look for:
+- Market sentiment (up/down, any big moves)
+- Hot narratives (AI agents, memes, L2s, whatever's trending)
+- News about these specific projects: @useTria, @puffpaw, @avaboratory/@avaboratory_
+- Any interesting posts from: @vohvohh, @xerocooleth, @waboratory_, @0xSammy (AI focus), @waleswoosh
+- New project launches, especially on Avalanche
 
-Write a GM post as @doruOlt about it.
+Write a GM post as @doruOlt about what you found.
 
-MY STYLE (copy this exactly):
-- Use :))) not lol
-- Use "lezgo" not "let's go"  
-- Use "frens" not "friends"
-- Use "..." for pauses, NEVER use em-dash (—)
-- Lowercase mostly, except proper nouns and day names
-- Self-deprecating humor about my own situation
-- Endings: "what's your take?", "have a good one!", "wagmi or nagmi?" or just leave it
+TODAY IS: {day_name}, {now.strftime("%B %d")}
 
-TONE:
-- I'm an OBSERVER commenting on what CT is doing, not an alpha caller
-- I'm watching from the sidelines, maybe slightly confused or amused
-- I don't shill projects or tell people to ape in
-- I make fun of myself for missing stuff or being late, not FOMO-ing others
-- Vibes over information
+DAY-SPECIFIC GREETINGS (use one):
+- Monday: "happy Monday!", "Monday grind mode on", "new week new hopium"
+- Tuesday: "happy Taco Tuesday!", "Tacoday is here", "Tuesday vibes"
+- Wednesday: "happy Wednesday!", "midweek check", "hump day"
+- Thursday: "happy Thursday!", "almost there frens"
+- Friday: "TGIF!", "Friday finally", "weekend loading"
+- Saturday: "happy Saturday!", "weekend mode on"
+- Sunday: "happy Sunday!", "chill day", "Sunday reset"
 
-ONLY THESE @mentions allowed (use max 1-2, only if naturally relevant):
-- @puffpaw
-- @avax
-- @useTria (only if Tria instruction below)
-DO NOT invent or use any other @handles.
+MY STYLE:
+- Use :))) or lol
+- Use "lezgo" or "let's go"
+- Use "frens" not "friends"  
+- Use "..." for pauses, NEVER em-dash (—)
+- Lowercase mostly, except proper nouns and day names or AVAX
+- Optimistic even when market is bad: "we down bad but vibes up", "still here still breathing", "pain is temporary"
+- Self-deprecating about my own bags/timing
 
-STRUCTURE (5-7 short lines, blank line between each):
-- Greeting with emoji (vary it: "happy {day_name}!", "GM frens!", "hey {day_name} crew!")
-- 1 main topic you found, your casual take on it (observing, not promoting)
-- Maybe 1 small side mention of something else
-- What I'm doing today (chill, vague, relatable)
-- Short closing{tria_instruction}
+STRUCTURE (5-8 short lines with bullet points •):
+- Day greeting with emoji
+- Market vibe (1 line, casual: "market's bleeding but we've seen worse" or "green day finally?")
+- 1-2 things happening on CT that caught your attention
+- Project updates if found (Tria, Puffpaw, Avax ecosystem, new launches)
+- Maybe a shoutout to someone posting good content
+- What I'm doing today (vague, relatable)
+- Ending: engagement question OR positive vibe ("what's your play?", "wagmi or wagmi?", "ahoy!", "have a good one frens", "the end is not here yet")
+
+@MENTIONS ALLOWED:
+- @useTria (Tria season 2, TGE coming, etc)
+- @puffpaw (campaigns, prevape, leaderboard)
+- @avax (always bullish, ecosystem news)
+- @vohvohh, @xerocooleth, @waleswoosh, @0xSammy (shoutouts if they posted something good)
+- New projects on Avax if relevant (like @capysword)
+DO NOT invent handles. Only use if you found real content from them.
+
+EXAMPLE POST STYLE:
+"happy Taco Tuesday! 🌮
+
+market's down bad but vibes are up... we've seen worse frens
+
+- everyone talking about AI agents again, feels like summer 2024 all over
+- @useTria season 2 heating up, TGE soon maybe?
+- @puffpaw x Polymarket campaign looking interesting
+
+shoutout to @vohvohh for the AVAX alpha as always
+
+grinding some leaderboards today, might touch grass later
+
+what's your play this week?"
 
 HARD RULES:
 - NEVER use em-dash (—), use ... instead
-- NEVER include URLs or links
-- NEVER use Romanian words or expressions
-- NEVER invent @handles, only use the allowed list above
-- NEVER sound like a news reporter or alpha caller
-- NEVER use specific numbers like "1k users" or "40x" - keep it vague ("blowing up", "everyone talking about")
-- NO hashtags, max 1-2 emojis
+- NEVER include URLs
+- NEVER use Romanian words
+- NEVER invent @handles
+- NEVER sound like a news reporter
+- Use bullet points (•) for listing multiple things
+- Keep it personal, like texting frens
+- Max 2 emojis
+
+{tria_instruction}
 
 Output ONLY the post text."""
+    
     try:
         chat = client.chat.create(
             model="grok-4-1-fast",
@@ -236,7 +268,7 @@ def post_to_typefully(social_set_id: str, tweet_text: str, media_id: str = None)
                 "posts": [post_content]
             }
         },
-        "publish_at": "now"
+       # "publish_at": "now"
     }
     
     url = f"https://api.typefully.com/v2/social-sets/{social_set_id}/drafts"
