@@ -32,16 +32,11 @@ def generate_gm_post():
     now = datetime.now()
     day_name = now.strftime("%A")
     yesterday = now - timedelta(days=1)
-    
-    # Random Tria mention (20% chance)
-    tria_instruction = ""
-    if random.random() < 0.2:
-        tria_instruction = "\n- Mention @useTria once, casually, like you used it for something today"
-    
+         
     prompt = f"""Search X/Twitter for what's happening in crypto in the last 24 hours. Look for:
 - Market sentiment (up/down, any big moves)
 - Hot narratives (AI agents, memes, L2s, whatever's trending)
-- News about these specific projects: @useTria, @puffpaw, @avax
+- News about these specific projects: @puffpaw, @avax
 - Any interesting posts from: @vohvohh, @xerocooleth, @waleswoosh, @0xSammy
 - New project launches, especially on Avalanche
 
