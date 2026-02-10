@@ -110,6 +110,10 @@ MY VOICE (copy exactly):
 - Short punchy sentences
 - Lowercase mostly
 
+BULLET POINTS:
+- minimal/short: NO bullets, just plain lines
+- medium/full: USE bullets (•) for list items
+
 NEVER USE:
 - "..." for pauses (use comma or new line)
 - em-dash (—)
