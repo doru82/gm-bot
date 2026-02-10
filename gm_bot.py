@@ -120,7 +120,7 @@ NEVER USE:
 
 VARIETY (important):
 - Different market comment each day: "down bad", "charts rough", "bleeding but breathing", "red everywhere", "finally green", "crabbing"
-- Different endings: "thoughts?", "what's your play?", "lezgo", "have a good one", "see ya", or no question at all
+- Different endings: "thoughts?", "what's your play?", "lezgo!", "have a good one!", "see ya", or no question at all
 - Different activities: "grinding", "building", "chilling", "taking it easy", "might touch grass"
 
 Output ONLY the post text, nothing else."""
