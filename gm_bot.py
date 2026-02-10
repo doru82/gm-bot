@@ -32,104 +32,99 @@ def generate_gm_post():
     now = datetime.now()
     day_name = now.strftime("%A")
     yesterday = now - timedelta(days=1)
-         
-    prompt = f"""Search X/Twitter for what's happening in crypto in the last 24 hours. Look for:
-- Market sentiment (up/down, any big moves)
-- Hot narratives (AI agents, memes, L2s, whatever's trending)
-- News about these specific projects: @puffpaw, @avax
-- Any interesting posts from: @vohvohh, @xerocooleth, @waleswoosh, @0xSammy
-- New project launches, especially on Avalanche
-
-Write a GM post as @doruOlt about what you found.
-
-TODAY IS: {day_name}, {now.strftime("%B %d")}
-
-DAY-SPECIFIC GREETINGS (pick one based on the day):
-- Monday: "happy Monday!", "new week new hopium"
-- Tuesday: "happy Taco Tuesday! 🌮", "Taco day is here"
-- Wednesday: "happy Wednesday!", "midweek check"
-- Thursday: "happy Thursday!", "almost there frens"
-- Friday: "TGIF!", "Friday finally"
-- Saturday: "happy Saturday!", "weekend mode"
-- Sunday: "happy Sunday!", "chill day"
-
-MY VOCABULARY (use these exact words):
-- "down bad" not "struggling" or "suffering"
-- "vibes" not "mood" or "atmosphere"  
-- "grinding" or "working hard"
-- "frens" not "friends"
-- "lezgo" or "let's go"
-- "always bullish" or "always bullish but not delusional"
-- ":)))" or "lol" or "ahaha"
-- "we down bad but vibes up" when market is red
-- "still here still breathing" for tough times
-
-WORDS TO NEVER USE:
-- abuzz, rotation, tossing, memo
-- essentially, basically, overall
-- landscape, sentiment (use "vibes" instead)
-- leverage, narrative (just describe what's happening)
-- any fancy/corporate words
-
-VARIETY (very important):
-- NEVER use "market down bad but vibes up" two days in row, rotate with: "we down bad", "charts rough but we good", "red candles everywhere", "bleeding but breathing"
-- NEVER use same ending two days in row, rotate: "what's your play?", "thoughts?", "lezgo frens", "have a good one!", "see ya!", or just end without question
-- NEVER say "grinding leaderboards" every day, rotate: "chilling today", "building", "taking it easy", "might touch grass"
-
-NO NEWS REPORTER STYLE:
-- NO exact numbers like "1.33B" or "950%", say "numbers looking crazy" or "massive growth"
-- NO technical jargon like "ERC-8004" or "C-Chain", say "new stuff shipping" or "devs cooking"
-- NO headline style like "ETF filings advance", say "ETF stuff moving forward"
-- Sound like a fren sharing news, not a journalist reporting it
-
-STRUCTURE (use bullet points •):
-- Day greeting with 1 emoji max
-- Market vibe in simple words ("market red but we good", "green candles finally")
-- 2-3 bullet points about what's happening:
-  • project updates (Tria, Puffpaw, Avax stuff)
-  • CT drama or hot topics
-  • maybe a shoutout if someone posted something good
-- What I'm doing (short, relatable)
-- Ending: question or positive close
-
-PUNCTUATION:
-- Use commas or short sentences for pauses
-- NEVER use "..." 
-- NEVER use em-dash (—)
-- Keep sentences short and punchy
-
-EXAMPLE (this is the vibe):
-"happy Tacotuesday! 🌮
-
-market red again but vibes up, we've seen worse
-
-- @puffpaw x Polymarket campaign is interesting
-- @avax ecosystem building while others sleep
-
-shoutout @vohvohh for the morning alpha
-
-grinding some leaderboards today
-
-what's your play frens?"
-
-@MENTIONS ALLOWED (only use if you found real content):
-- @puffpaw  
-- @avax
-- @vohvohh, @xerocooleth, @waleswoosh, @0xSammy
-
-HARD RULES:
-- NEVER use "..." for pauses
-- NEVER use em-dash (—)
-- NEVER use fancy vocabulary
-- NEVER include URLs
-- NEVER use Romanian
-- NEVER invent @handles
-- ALWAYS use bullet points (•) for lists
-- ALWAYS use day-appropriate greeting
-- Max 1 emoji in greeting, none elsewhere
-
-Output ONLY the post text."""
     
+    # Random post type
+    post_type = random.choice(["minimal", "minimal", "short", "short", "medium", "full"])
+    # weighted: 33% minimal, 33% short, 17% medium, 17% full
+    
+    # Random: include tags or not (40% chance)
+    include_tags = random.random() < 0.4
+    
+    # Tag instruction
+    if include_tags:
+        tag_instruction = "YES - use 1-2 @mentions IF naturally relevant: @puffpaw, @avax, @vohvohh, @xerocooleth, @waleswoosh"
+    else:
+        tag_instruction = "NO - zero @mentions today, no tags at all"
+    
+    prompt = f"""Search X/Twitter for what's happening in crypto in the last 24 hours.
+
+Write a GM post as @doruOlt.
+
+TODAY: {day_name}, {now.strftime("%B %d")}
+POST TYPE: {post_type}
+TAGS: {tag_instruction}
+
+POST TYPE RULES:
+
+IF "minimal" (2-3 lines ONLY, just vibes, no news):
+Examples:
+"happy Tuesday! 🌮
+we down bad but still breathing
+have a good one frens"
+
+"gm Saturday
+taking it easy today
+lezgo"
+
+"happy Monday!
+new week, same grind
+thoughts?"
+
+IF "short" (3-4 lines, ONE topic max):
+Examples:
+"happy Thursday!
+charts rough but we good
+heard something about puffpaw airdrop, might check later
+see ya"
+
+"TGIF!
+finally some green candles
+chilling today, maybe touch grass
+what's your play?"
+
+IF "medium" (4-5 lines, 1-2 bullets):
+"happy Wednesday!
+market dumping again but vibes up
+- avax devs cooking something
+- ai agents still the hot topic
+building today, lezgo"
+
+IF "full" (5-7 lines, 2-3 bullets, maybe shoutout):
+Full post with bullets, more detail, possible shoutout
+
+DAY GREETINGS (pick one):
+- Monday: "happy Monday!", "gm Monday", "new week lezgo"
+- Tuesday: "happy Taco Tuesday! 🌮", "Tacoday!", "happy Tuesday!"
+- Wednesday: "happy Wednesday!", "gm Wednesday", "midweek vibes"
+- Thursday: "happy Thursday!", "gm Thursday", "almost Friday"
+- Friday: "TGIF!", "Friday finally!", "happy Friday!"
+- Saturday: "happy Saturday!", "gm Saturday", "weekend mode"
+- Sunday: "happy Sunday!", "gm Sunday", "chill day"
+
+MY VOICE (copy exactly):
+- "down bad", "vibes up", "we good", "still here"
+- "lezgo" not "let's go"
+- "frens" not "friends"
+- ":)))" or "lol" for laughs
+- "cooking", "shipping", "grinding", "building"
+- Short punchy sentences
+- Lowercase mostly
+
+NEVER USE:
+- "..." for pauses (use comma or new line)
+- em-dash (—)
+- Fancy words: abuzz, narrative, leverage, sentiment, essentially
+- Exact numbers like "1.33B" or "950%" (say "numbers looking good" or "big growth")
+- Technical jargon like "ERC-8004" (say "new stuff" or "devs cooking")
+- News headline style
+
+VARIETY (important):
+- Different market comment each day: "down bad", "charts rough", "bleeding but breathing", "red everywhere", "finally green", "crabbing"
+- Different endings: "thoughts?", "what's your play?", "lezgo", "have a good one", "see ya", or no question at all
+- Different activities: "grinding", "building", "chilling", "taking it easy", "might touch grass"
+
+Output ONLY the post text, nothing else."""
+
     try:
         chat = client.chat.create(
             model="grok-4-1-fast",
@@ -146,12 +141,13 @@ Output ONLY the post text."""
         
         tweet = response.content.strip()
         tweet = tweet.strip('"').strip("'")
-        tweet = tweet.replace("—", "...")
-        tweet = tweet.replace("–", "...")
+        tweet = tweet.replace("—", ",")
+        tweet = tweet.replace("–", ",")
+        tweet = tweet.replace("...", ",")
         lines = [line.strip() for line in tweet.split('\n') if line.strip()]
         tweet = '\n\n'.join(lines)
         
-        print(f"✅ Generated GM: {tweet}")
+        print(f"✅ Generated GM ({post_type}, tags={include_tags}): {tweet}")
         return tweet
             
     except Exception as e:
@@ -285,7 +281,7 @@ def post_to_typefully(social_set_id: str, tweet_text: str, media_id: str = None)
                 "posts": [post_content]
             }
         },
-        "publish_at": "now"
+        #"publish_at": "now"
     }
     
     url = f"https://api.typefully.com/v2/social-sets/{social_set_id}/drafts"
